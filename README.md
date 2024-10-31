@@ -59,13 +59,15 @@ tsconfig.json
 {
   "compilerOptions": {
     "target": "ESNext", // Usa la versión más reciente de JavaScript
-    "module": "ESNext", // Usa el sistema de módulos más reciente de JavaScript
+    "module": "NodeNext", // Usa el sistema de módulos más reciente de JavaScript
     "strict": true, // Activa todas las comprobaciones estrictas para ayudar a encontrar errores
     "esModuleInterop": true, // Facilita la importación de módulos CommonJS
     "skipLibCheck": true, // Omite la verificación de tipos en los archivos de declaración para acelerar la compilación
     "forceConsistentCasingInFileNames": true, // Asegura que los nombres de archivo sean consistentes en mayúsculas y minúsculas
     "outDir": "./dist", // Carpeta donde se colocarán los archivos compilados
-    "rootDir": "./src" // Carpeta raíz de los archivos fuente
+    "rootDir": "./src", // Carpeta raíz de los archivos fuente,
+
+    "moduleResolution": "nodenext" // Resuelve los módulos de la misma forma que Node.js
   },
   "include": ["src/**/*"], // Incluye todos los archivos en la carpeta src y sus subcarpetas
   "exclude": ["node_modules", "dist"] // Excluye las carpetas node_modules y dist del proceso de compilación
