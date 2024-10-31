@@ -1,5 +1,5 @@
 import express from "express";
-import homeRoute from "./router/home.route";
+import homeRoute from "./router/home.route.js";
 
 const __dirname = import.meta.dirname;
 console.log(__dirname);
