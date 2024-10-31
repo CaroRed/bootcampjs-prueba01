@@ -50,7 +50,7 @@ npm i -D typescript @types/node tsx @types/express
 Crear un archivo de configuración de TypeScript
 
 ```sh
-npx tsx init
+npx tsc --init
 ```
 
 tsconfig.json
