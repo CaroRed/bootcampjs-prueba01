@@ -10,11 +10,33 @@ En este artículo, veremos cómo ejecutar TypeScript con node.js utilizando tsx 
 - [https://github.com/privatenumber/ts-runtime-comparison](https://github.com/privatenumber/ts-runtime-comparison)
 - [https://nodejs.org/en/learn/typescript/run-natively](https://nodejs.org/en/learn/typescript/run-natively)
 
+## Software
+
+- [https://nodejs.org/en/](https://nodejs.org/en/)
+- [https://code.visualstudio.com/](https://code.visualstudio.com/)
+- [https://www.docker.com/](https://www.docker.com/)
+
+## Extensiones de vscode
+
+- [https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens)
+- [https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client)
+- [https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors)
+- [https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres)
+- [https://marketplace.visualstudio.com/items?itemName=MariusAlchimavicius.json-to-ts](https://marketplace.visualstudio.com/items?itemName=MariusAlchimavicius.json-to-ts)
+- [https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost](https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost)
+- [https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)
+- [https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
+- [https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+- [https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-dockerfile-syntax](https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-dockerfile-syntax) -[https://marketplace.visualstudio.com/items?itemName=atomiks.moonlight](https://marketplace.visualstudio.com/items?itemName=atomiks.moonlight)
+
 ## Node.js + TSX
 
 tsx significa TypeScript Execute y es una mejora de Node.js para ejecutar TypeScript.
 
-tsx está diseñado para simplificar tu experiencia con TypeScript. Mejora la compatibilidad de Node.js con TypeScript tanto en modo CommonJS como ESM, lo que te permite cambiar entre ellos sin problemas. También admitetsconfig.jsonrutas e incluye un modo Watch para que el desarrollo sea aún más fácil.
+tsx está diseñado para simplificar tu experiencia con TypeScript. Mejora la compatibilidad de Node.js con TypeScript tanto en modo CommonJS como ESM, lo que te permite cambiar entre ellos sin problemas. También admite tsconfig.json rutas e incluye un modo Watch para que el desarrollo sea aún más fácil.
 
 tsx no comprueba el tipo de su código por sí solo y espera que se lo gestione por separado. Si bien tsx no requiere que se instale TypeScript y las comprobaciones de tipo que ofrece su IDE pueden ser suficientes para scripts rápidos, **se recomienda encarecidamente incluir un paso de comprobación de tipo en sus proyectos**.
 
