@@ -1,11 +1,12 @@
-# TypeScript + Node.js
+# Template Node Typescript tsx pkgroll
 
-En este artículo, veremos cómo ejecutar TypeScript con node.js.
+En este artículo, veremos cómo ejecutar TypeScript con node.js utilizando tsx y pkgroll.
 
 ## Recursos
 
 - [https://tsx.is](https://tsx.is/)
 - [https://tsx.is/watch-mode](https://tsx.is/watch-mode)
+- [https://github.com/privatenumber/pkgroll](https://github.com/privatenumber/pkgroll)
 - [https://github.com/privatenumber/ts-runtime-comparison](https://github.com/privatenumber/ts-runtime-comparison)
 - [https://nodejs.org/en/learn/typescript/run-natively](https://nodejs.org/en/learn/typescript/run-natively)
 
@@ -33,105 +34,165 @@ Crear un proyecto de Node.js
 npm init -y
 ```
 
-- express: Para crear un servidor web
 - typescript: Para comprobar el tipo con el tsccomando CLI
 - @types/node: Para obtener la información de tipo de Node.js
 - tsx: Para ejecutar TypeScript en tiempo de ejecución
+- express: Para crear un servidor web
 - @types/express: Para obtener la información de tipo de Express
+- pg: Para conectarse a una base de datos PostgreSQL
+- @types/pg: Para obtener la información de tipo de pg
+- pkgroll: Para empaquetar tu aplicación en un solo archivo
 
 ```sh
-npm i express
+npm init -y
 ```
 
 ```sh
-npm i -D typescript @types/node tsx @types/express
+npm i -D typescript tsx pkgroll
 ```
 
-Crear un archivo de configuración de TypeScript
+```sh
+npm i -D @types/node @types/express @types/pg
+```
+
+```sh
+npm i express pg
+```
 
 ```sh
 npx tsc --init
 ```
 
-tsconfig.json
+## tsconfig.json
 
 ```json
 {
   "compilerOptions": {
-    "target": "ESNext", // Usa la versión más reciente de JavaScript
-    "module": "NodeNext", // Usa el sistema de módulos más reciente de JavaScript
-    "strict": true, // Activa todas las comprobaciones estrictas para ayudar a encontrar errores
-    "esModuleInterop": true, // Facilita la importación de módulos CommonJS
-    "skipLibCheck": true, // Omite la verificación de tipos en los archivos de declaración para acelerar la compilación
-    "forceConsistentCasingInFileNames": true, // Asegura que los nombres de archivo sean consistentes en mayúsculas y minúsculas
-    "outDir": "./dist", // Carpeta donde se colocarán los archivos compilados
-    "rootDir": "./src", // Carpeta raíz de los archivos fuente,
-
-    "moduleResolution": "nodenext" // Resuelve los módulos de la misma forma que Node.js
+    "strict": true, // Habilitar todas las opciones de comprobación de tipo
+    "moduleDetection": "force", // Forzar la detección de módulos
+    "module": "ESNext", // Especificar el sistema de módulos
+    "target": "ESNext", // Especificar la versión de ECMAScript
+    "allowJs": true, // Permitir archivos JS
+    "esModuleInterop": true, // Habilitar interoperabilidad de módulos
+    "isolatedModules": true // Habilitar la comprobación de módulos independientes
   },
-  "include": ["src/**/*"], // Incluye todos los archivos en la carpeta src y sus subcarpetas
-  "exclude": ["node_modules", "dist"] // Excluye las carpetas node_modules y dist del proceso de compilación
+  "include": ["src/**/*"], // Incluir archivos
+  "exclude": ["node_modules", "dist"] // Excluir archivos
 }
 ```
 
-package.json
+## package.json
 
 - --clear-screen=false: Para que no se borre la pantalla al guardar un archivo
 
 ```json
 {
+  "exports": "./dist/index.mjs",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "start": "node dist/index.mjs",
     "dev": "tsx watch --clear-screen=false src/index.ts",
-    "start": "node dist/index.js"
-  },
-  "dependencies": {
-    "express": "^4.21.1"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.0",
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "build": "pkgroll"
   }
 }
 ```
 
-src\index.ts
+Ejecutar el proyecto en modo desarrollo
+
+```sh
+npm run dev
+```
+
+Pasar proyecto a producción
+
+```sh
+npm run build
+```
+
+Ejecutar el proyecto en modo producción
+
+```sh
+npm start
+```
+
+## docker-compose.yml
+
+```yml
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: dbtest
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
+```
+
+## src/index.ts
 
 ```ts
 import express from "express";
+import homeRoute from "./routes/home.route";
+
+import { testConnection } from "./database/index";
+
+testConnection();
 
 const __dirname = import.meta.dirname;
 console.log(__dirname);
 
 const app = express();
 
-app.get("/", (_, res) => {
-  res.send("Hello World!");
+app.use("/", homeRoute);
+
+const PORT = process.env.PORT || 3002;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port http://localhot:${PORT}`);
+});
+```
+
+## src/routes/home.route.ts
+
+```ts
+import { Router } from "express";
+
+const router = Router();
+
+router.get("/", (req, res) => {
+  res.send("Hello World");
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
-});
+export default router;
 ```
 
-Ejecutar el servidor en desarrollo
+## src/database/index.ts
 
-```sh
-npm run dev
-```
+```ts
+import pg from "pg";
 
-Construir el proyecto
+const { Pool } = pg;
+const connectionString = "postgresql://postgres:root@localhost:5434/dbtest";
 
-```sh
-npm run build
-```
+export const pool = new Pool({ connectionString });
 
-Ejecutar el proyecto en producción
-
-```sh
-npm start
+export const testConnection = async () => {
+  try {
+    const { rows } = await pool.query("SELECT NOW()");
+    console.log("Postgres connected:", rows[0].now);
+  } catch (error) {
+    console.log(error);
+  }
+};
 ```
 
 ## node --watch --experimental-strip-types src/index.ts
