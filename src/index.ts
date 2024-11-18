@@ -1,3 +1,5 @@
+import EventEmitter from 'node:events';
+
 //** 1. Gestión de Proyectos y Tareas
 //interfaz
 type TaskStatus = "pending" | "in progress" | "completed";
@@ -44,7 +46,7 @@ const projects = [
         status: "pending",
         deliveryDate: "2024-12-15"
       },
-      { idTask: 4,
+      { idTask: 5,
         description: "UI/UX integration",
         status: "in progress",
         deliveryDate: "2024-12-30"
@@ -61,6 +63,12 @@ const projects = [
         description: "Gather client requirements", 
         status: "completed", 
         deliveryDate: "2024-11-05" 
+      },
+      { 
+        idTask: 11, 
+        description: "Set team assignments", 
+        status: "pending", 
+        deliveryDate: "2024-11-30" 
       } 
     ] 
   }
@@ -133,7 +141,7 @@ const filterPojectTasks = (idProject:number, filterFunction: (task: Task) => boo
     const filter = project.tasks.filter(filterFunction);
     return filter;
   }
-  return null;
+  return undefined;
 }
  
 //2.2 funcion para calcular cuantos días le quedan a las tareas pendientes de un proyecto
@@ -213,9 +221,36 @@ const getProjectDetails = async (id: number) => {
   }
 };
 
+//3.2 actualizar estado de tarea
+const eventEmitter = new EventEmitter();
+
+const updateTaskStatus = (idProject: number, idTask: number, newStatus:TaskStatus) => 
+{
+  const project = getProject(idProject);
+  if(project)
+  {
+    
+    const task = project.tasks.find(t => t.idTask === idTask);
+    if(task)
+    {
+      task.status = newStatus;
+      eventEmitter.emit("taskUpdated", task);
+    }else{
+      console.warn('No task was found!');
+    }
+  }
+  return null;
+}
+
+//3.3
+// Escuchar cuando una tarea se actualiza
+eventEmitter.on("taskUpdated", (task: Task) => {
+  console.log(`La tarea con ID ${task.idTask} ha sido actualizada.`);
+});
+
 /** Ejemplos de las funciones */
 //crear una nueva tarea al proyecto numero 2
-addTask(2, 11, 'lorem ipsum dolor', 'completed', '2024-11-16');
+addTask(2, 12, 'lorem ipsum dolor', 'completed', '2024-11-16');
 //console log para ver que se ha agregado la nueva tarea
 console.table(projects);
 
@@ -238,3 +273,5 @@ console.log(getCriticsTask(1));
 // obtener detalle de un proyecto usando async/await
 getProjectDetails(1);
 
+//actualiza estado de una tarea de un proyecto
+updateTaskStatus(2, 11, 'in progress');
